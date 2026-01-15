@@ -1,5 +1,5 @@
-from enum.casillas import EstadoCasilla
-from enum.resultado import Resultado
+from enums.estado_casilla import EstadoCasilla
+from enums.resultado import Resultado
 
 tablero_type = list[list[EstadoCasilla]]
 
