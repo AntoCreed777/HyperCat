@@ -6,9 +6,13 @@ from enums.resultado import Resultado
 
 
 class VentanaGato:
-    DIM = 800
-    PAD = 10
-    BTN = (DIM - PAD * 4) // 3
+    DIM: int = 800
+    PAD: int = 10
+    BTN: int = (DIM - PAD * 4) // 3
+
+    juego: Gato
+    botones: list[list[tk.Button]]
+    ventana: tk.Tk
 
     def __init__(self):
         self.juego = Gato()
@@ -24,7 +28,6 @@ class VentanaGato:
         self.ventana.resizable(False, False)
 
     def _crear_tablero(self):
-
         for i in range(3):
             for j in range(3):
                 btn = tk.Button(self.ventana, font=("Arial", 56, "bold"))
@@ -40,7 +43,7 @@ class VentanaGato:
 
                 self.botones[i][j] = btn
 
-    def _click(self, i, j, boton):
+    def _click(self, i: int, j: int, boton: tk.Button):
         simbolo = self.juego.turno.name
         if not self.juego.jugar(i, j):
             messagebox.showwarning("Movimiento inválido")
@@ -52,7 +55,7 @@ class VentanaGato:
         if resultado.terminado():
             self._fin_juego(resultado)
 
-    def _fin_juego(self, resultado):
+    def _fin_juego(self, resultado: Resultado):
         for fila in self.botones:
             for boton in fila:
                 boton.config(state="disabled")

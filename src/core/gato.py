@@ -9,6 +9,10 @@ Turno: TypeAlias = Literal[EstadoCasilla.X, EstadoCasilla.O]
 
 
 class Gato:
+
+    turno: Turno
+    tablero: Tablero
+
     def __init__(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
         self.__generar_tablero()
         self.turno = turno_inicial
@@ -26,7 +30,7 @@ class Gato:
         if self.validar_victoria().terminado():
             return False  # Juego ya terminado
 
-        if fila < 0 or fila > 2 or columna < 0 or columna > 2:
+        if self._fuera_de_rango(fila, columna):
             return False  # Jugada inválida
 
         if self.tablero[fila][columna] != EstadoCasilla.VACIA:
@@ -35,6 +39,10 @@ class Gato:
         self.tablero[fila][columna] = self.turno
         self.__cambiar_turno()
         return True  # Jugada válida
+    
+    def _fuera_de_rango(self, fila: int, columna: int) -> bool:
+        return not (0 <= fila < 3 and 0 <= columna < 3)
+
 
     def __cambiar_turno(self) -> None:
         self.turno = (
@@ -91,3 +99,6 @@ class Gato:
         elif jugador == EstadoCasilla.O:
             return Resultado.VICTORIA_O
         raise ValueError("Jugador inválido para vincular resultado.")
+
+    def terminado(self) -> bool:
+        return self.validar_victoria().terminado()
