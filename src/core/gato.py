@@ -1,30 +1,31 @@
+from typing import Literal, TypeAlias
+
 from enums.estado_casilla import EstadoCasilla
 from enums.resultado import Resultado
 
-tablero_type = list[list[EstadoCasilla]]
+Tablero: TypeAlias = list[list[EstadoCasilla]]
+
+Turno: TypeAlias = Literal[EstadoCasilla.X, EstadoCasilla.O]
 
 
 class Gato:
-    def __init__(self, turno_inicial: EstadoCasilla = EstadoCasilla.X) -> None:
+    def __init__(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
         self.__generar_tablero()
         self.turno = turno_inicial
 
-    def reiniciar(self) -> None:
+    def reiniciar(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
         self.__generar_tablero()
-        self.turno = EstadoCasilla.X
+        self.turno = turno_inicial
 
     def __generar_tablero(self) -> None:
-        tablero: tablero_type = []
-
-        for _ in range(3):
-            fila = []
-            for _ in range(3):
-                fila.append(EstadoCasilla.VACIA)
-            tablero.append(fila)
-
-        self.tablero = tablero
+        self.tablero: Tablero = [
+            [EstadoCasilla.VACIA for _ in range(3)] for _ in range(3)
+        ]
 
     def jugar(self, fila: int, columna: int) -> bool:
+        if self.validar_victoria() != Resultado.EN_CURSO:
+            return False  # Juego ya terminado
+
         if fila < 0 or fila > 2 or columna < 0 or columna > 2:
             return False  # Jugada inválida
 
@@ -50,6 +51,7 @@ class Gato:
                 != EstadoCasilla.VACIA
             ):
                 return self.__vincular_Jugador_tipo_resultado(self.tablero[i][0])
+
             if (
                 self.tablero[0][i]
                 == self.tablero[1][i]
@@ -66,6 +68,7 @@ class Gato:
             != EstadoCasilla.VACIA
         ):
             return self.__vincular_Jugador_tipo_resultado(self.tablero[0][0])
+
         if (
             self.tablero[0][2]
             == self.tablero[1][1]
@@ -82,13 +85,9 @@ class Gato:
 
         return Resultado.EMPATE
 
-    def __vincular_Jugador_tipo_resultado(self, jugador: EstadoCasilla) -> Resultado:
+    def __vincular_Jugador_tipo_resultado(self, jugador: Turno) -> Resultado:
         if jugador == EstadoCasilla.X:
             return Resultado.VICTORIA_X
         elif jugador == EstadoCasilla.O:
             return Resultado.VICTORIA_O
-
-    def imprimir_tablero(self) -> None:
-        for fila in self.tablero:
-            print(" | ".join(casilla.name for casilla in fila))
-            print("-" * 9)
+        raise ValueError("Jugador inválido para vincular resultado.")
