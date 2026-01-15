@@ -49,7 +49,7 @@ class VentanaGato:
         boton.config(text=simbolo, state="disabled")
 
         resultado = self.juego.validar_victoria()
-        if resultado in (Resultado.VICTORIA_X, Resultado.VICTORIA_O, Resultado.EMPATE):
+        if resultado.terminado():
             self._fin_juego(resultado)
 
     def _fin_juego(self, resultado):
