@@ -23,7 +23,7 @@ class Gato:
         ]
 
     def jugar(self, fila: int, columna: int) -> bool:
-        if self.validar_victoria() != Resultado.EN_CURSO:
+        if self.validar_victoria().terminado():
             return False  # Juego ya terminado
 
         if fila < 0 or fila > 2 or columna < 0 or columna > 2:

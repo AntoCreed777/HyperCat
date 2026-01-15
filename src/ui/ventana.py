@@ -57,15 +57,7 @@ class VentanaGato:
             for boton in fila:
                 boton.config(state="disabled")
 
-        match resultado:
-            case Resultado.VICTORIA_X:
-                msg = "¡X ha ganado!"
-            case Resultado.VICTORIA_O:
-                msg = "¡O ha ganado!"
-            case Resultado.EMPATE:
-                msg = "Empate"
-
-        messagebox.showinfo("Fin del juego", msg)
+        messagebox.showinfo("Fin del juego", resultado.mensaje())
 
     def run(self):
         self.ventana.mainloop()
