@@ -32,57 +32,18 @@ class Gato(BaseGato):
         return True  # Jugada válida
 
     @override
-    def validar_victoria(self) -> Resultado:
-        if self.resultado is not Resultado.EN_CURSO:
-            return self.resultado
-
-        # Validar filas y columnas
-        for i in range(3):
-            if (
-                self.tablero[i][0]
-                == self.tablero[i][1]
-                == self.tablero[i][2]
-                != EstadoCasilla.VACIA
-            ):
-                self.resultado = self._vincular_Jugador_tipo_resultado(
-                    self.tablero[i][0]
-                )
-                return self.resultado
-
-            if (
-                self.tablero[0][i]
-                == self.tablero[1][i]
-                == self.tablero[2][i]
-                != EstadoCasilla.VACIA
-            ):
-                self.resultado = self._vincular_Jugador_tipo_resultado(
-                    self.tablero[0][i]
-                )
-                return self.resultado
-
-        # Validar diagonales
-        if (
-            self.tablero[0][0]
-            == self.tablero[1][1]
-            == self.tablero[2][2]
-            != EstadoCasilla.VACIA
+    def _linea_ganadora(self, coords: list[tuple[int, int]]) -> Resultado | None:
+        e = self.tablero[coords[0][0]][coords[0][1]]
+        if e != EstadoCasilla.VACIA and all(
+            self.tablero[f][c] == e for f, c in coords
         ):
-            self.resultado = self._vincular_Jugador_tipo_resultado(self.tablero[0][0])
-            return self.resultado
-        if (
-            self.tablero[0][2]
-            == self.tablero[1][1]
-            == self.tablero[2][0]
-            != EstadoCasilla.VACIA
-        ):
-            self.resultado = self._vincular_Jugador_tipo_resultado(self.tablero[0][2])
-            return self.resultado
+            return self._vincular_Jugador_tipo_resultado(e)
+        return None
 
-        # Validar empate
+    @override
+    def _validar_empate(self) -> bool:
         for fila in self.tablero:
             for casilla in fila:
                 if casilla == EstadoCasilla.VACIA:
-                    return Resultado.EN_CURSO
-
-        self.resultado = Resultado.EMPATE
-        return self.resultado
+                    return False
+        return True

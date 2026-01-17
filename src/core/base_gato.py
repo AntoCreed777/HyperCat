@@ -42,12 +42,53 @@ class BaseGato(ABC):
             return Resultado.VICTORIA_O
         raise ValueError("Jugador inválido para vincular resultado.")
 
+    def validar_victoria(self) -> Resultado:
+        if self.resultado is not Resultado.EN_CURSO:
+            return self.resultado
+
+        lineas = [
+            # Filas
+            [(i,0),(i,1),(i,2)] for i in range(3)
+        ] + [
+            # Columnas
+            [(0,i),(1,i),(2,i)] for i in range(3)
+        ] + [
+            # Diagonales
+            [(0,0),(1,1),(2,2)],
+            [(0,2),(1,1),(2,0)]
+        ]
+
+        # Validar victoria
+        for linea in lineas:
+            if (r := self._linea_ganadora(linea)):
+                self.resultado = r
+                return r
+
+        # Validar empate
+        if self._validar_empate():
+            self.resultado = Resultado.EMPATE
+        else:
+            self.resultado = Resultado.EN_CURSO
+
+        return self.resultado
+
     @abstractmethod
     def jugar(self, fila: int, columna: int) -> bool:
         pass
 
     @abstractmethod
-    def validar_victoria(self) -> Resultado:
+    def _linea_ganadora(self, coords: list[tuple[int, int]]) -> Resultado | None:
+        """Comprueba si una línea específica es ganadora."""
+        pass
+
+    @abstractmethod
+    def _validar_empate(self) -> bool:
+        """
+        Determina si el juego ha terminado en empate.
+        
+        Returns:
+            bool: True si el juego ha terminado en empate, False de lo contrario.
+        """
         pass
 
     def terminado(self) -> bool:
