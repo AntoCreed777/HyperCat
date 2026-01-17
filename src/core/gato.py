@@ -1,31 +1,22 @@
-from typing import Literal, TypeAlias
+from typing import TypeAlias, override
 
 from enums.estado_casilla import EstadoCasilla
 from enums.resultado import Resultado
 
+from .base_gato import BaseGato
+
 Tablero: TypeAlias = list[list[EstadoCasilla]]
 
-Turno: TypeAlias = Literal[EstadoCasilla.X, EstadoCasilla.O]
 
+class Gato(BaseGato):
 
-class Gato:
-
-    turno: Turno
-    tablero: Tablero
-
-    def __init__(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
-        self.__generar_tablero()
-        self.turno = turno_inicial
-
-    def reiniciar(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
-        self.__generar_tablero()
-        self.turno = turno_inicial
-
-    def __generar_tablero(self) -> None:
+    @override
+    def _generar_tablero(self) -> None:
         self.tablero: Tablero = [
             [EstadoCasilla.VACIA for _ in range(3)] for _ in range(3)
         ]
 
+    @override
     def jugar(self, fila: int, columna: int) -> bool:
         if self.validar_victoria().terminado():
             return False  # Juego ya terminado
@@ -37,19 +28,14 @@ class Gato:
             return False  # Jugada inválida
 
         self.tablero[fila][columna] = self.turno
-        self.__cambiar_turno()
+        self._cambiar_turno()
         return True  # Jugada válida
-    
-    def _fuera_de_rango(self, fila: int, columna: int) -> bool:
-        return not (0 <= fila < 3 and 0 <= columna < 3)
 
-
-    def __cambiar_turno(self) -> None:
-        self.turno = (
-            EstadoCasilla.O if self.turno == EstadoCasilla.X else EstadoCasilla.X
-        )
-
+    @override
     def validar_victoria(self) -> Resultado:
+        if self.resultado is not Resultado.EN_CURSO:
+            return self.resultado
+
         # Validar filas y columnas
         for i in range(3):
             if (
@@ -58,7 +44,10 @@ class Gato:
                 == self.tablero[i][2]
                 != EstadoCasilla.VACIA
             ):
-                return self.__vincular_Jugador_tipo_resultado(self.tablero[i][0])
+                self.resultado = self._vincular_Jugador_tipo_resultado(
+                    self.tablero[i][0]
+                )
+                return self.resultado
 
             if (
                 self.tablero[0][i]
@@ -66,7 +55,10 @@ class Gato:
                 == self.tablero[2][i]
                 != EstadoCasilla.VACIA
             ):
-                return self.__vincular_Jugador_tipo_resultado(self.tablero[0][i])
+                self.resultado = self._vincular_Jugador_tipo_resultado(
+                    self.tablero[0][i]
+                )
+                return self.resultado
 
         # Validar diagonales
         if (
@@ -75,15 +67,16 @@ class Gato:
             == self.tablero[2][2]
             != EstadoCasilla.VACIA
         ):
-            return self.__vincular_Jugador_tipo_resultado(self.tablero[0][0])
-
+            self.resultado = self._vincular_Jugador_tipo_resultado(self.tablero[0][0])
+            return self.resultado
         if (
             self.tablero[0][2]
             == self.tablero[1][1]
             == self.tablero[2][0]
             != EstadoCasilla.VACIA
         ):
-            return self.__vincular_Jugador_tipo_resultado(self.tablero[0][2])
+            self.resultado = self._vincular_Jugador_tipo_resultado(self.tablero[0][2])
+            return self.resultado
 
         # Validar empate
         for fila in self.tablero:
@@ -91,14 +84,5 @@ class Gato:
                 if casilla == EstadoCasilla.VACIA:
                     return Resultado.EN_CURSO
 
-        return Resultado.EMPATE
-
-    def __vincular_Jugador_tipo_resultado(self, jugador: Turno) -> Resultado:
-        if jugador == EstadoCasilla.X:
-            return Resultado.VICTORIA_X
-        elif jugador == EstadoCasilla.O:
-            return Resultado.VICTORIA_O
-        raise ValueError("Jugador inválido para vincular resultado.")
-
-    def terminado(self) -> bool:
-        return self.validar_victoria().terminado()
+        self.resultado = Resultado.EMPATE
+        return self.resultado
