@@ -168,7 +168,7 @@ class VentanaHyperCat:
     def run(self):
         self.ventana.mainloop()
 
-    def _color_segun_simbolo(self, simbolo: str) -> str:
+    def _color_segun_simbolo(self, simbolo: str) -> Colors:
         match simbolo:
             case EstadoCasilla.X.name:
                 return Colors.BLUE
@@ -179,7 +179,7 @@ class VentanaHyperCat:
 
     def _color_segun_cuadrante(
         self, fila: int, columna: int, activo: bool = False
-    ) -> str:
+    ) -> Colors:
         if (fila // 3 + columna // 3) % 2 == 0:
             return Colors.LIGHT_GREEN if activo else Colors.DARK_GREEN
         else:

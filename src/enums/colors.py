@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Colors(str, Enum):
+class Colors(StrEnum):
     ALICE_BLUE = "alice blue"
     ANTIQUE_WHITE = "antique white"
     AQUA = "aqua"
@@ -103,6 +103,3 @@ class Colors(str, Enum):
     RED = "red"
     ORANGE = "orange"
     ORANGE_RED = "orange red"
-
-    def __str__(self):
-        return self.value
