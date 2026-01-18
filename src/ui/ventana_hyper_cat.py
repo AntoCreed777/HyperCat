@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from core.hyper_cat import HyperCat
-from enums import EstadoCasilla, Resultado
+from enums import Colors, EstadoCasilla, Resultado
 
 
 class VentanaHyperCat:
@@ -30,7 +30,12 @@ class VentanaHyperCat:
     def _crear_tablero(self):
         for i in range(9):
             for j in range(9):
-                btn = tk.Button(self.ventana, font=("Arial", 56, "bold"))
+                btn = tk.Button(
+                    self.ventana,
+                    font=("Arial", 56, "bold"),
+                    activebackground=Colors.ORANGE,
+                    bg=self._color_segun_cuadrante(i, j),
+                )
 
                 btn.config(command=lambda i=i, j=j, b=btn: self._click(i, j, b))
 
@@ -64,7 +69,7 @@ class VentanaHyperCat:
         boton.config(
             text=simbolo,
             state="disabled",
-            disabledforeground="blue" if simbolo == EstadoCasilla.X.name else "red",
+            disabledforeground=self._color_segun_simbolo(simbolo),
         )
 
         # Bloquear todos los botones primero
@@ -87,14 +92,22 @@ class VentanaHyperCat:
                 for sub_i in range(3):
                     for sub_j in range(3):
                         btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
+                        simbolo = "X"
                         btn.config(
-                            text="X", state="disabled", disabledforeground="blue"
+                            text=simbolo,
+                            state="disabled",
+                            disabledforeground=self._color_segun_simbolo(simbolo),
                         )
             case Resultado.VICTORIA_O:
                 for sub_i in range(3):
                     for sub_j in range(3):
                         btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
-                        btn.config(text="O", state="disabled", disabledforeground="red")
+                        simbolo = "O"
+                        btn.config(
+                            text=simbolo,
+                            state="disabled",
+                            disabledforeground=self._color_segun_simbolo(simbolo),
+                        )
             case Resultado.EMPATE:
                 self.juego.tablero[fila][columna].reiniciar()
                 for sub_i in range(3):
@@ -107,16 +120,24 @@ class VentanaHyperCat:
             self._fin_juego(resultado)
 
     def _fin_juego(self, resultado: Resultado):
-        for fila in self.botones:
-            for boton in fila:
-                boton.config(state="disabled")
+        simbolo_ganador = "X" if resultado == Resultado.VICTORIA_X else "O"
+        for i in range(9):
+            for j in range(9):
+                self.botones[i][j].config(
+                    text=simbolo_ganador,
+                    state="disabled",
+                    disabledforeground=Colors.GOLD,
+                    bg=self._color_segun_simbolo(simbolo_ganador),
+                )
 
         messagebox.showinfo("Fin del juego", resultado.mensaje())
 
     def _bloquear_todos_botones(self):
-        for fila in self.botones:
-            for boton in fila:
-                boton.config(state="disabled")
+        for f in range(9):
+            for c in range(9):
+                self.botones[f][c].config(
+                    state="disabled", bg=self._color_segun_cuadrante(f, c)
+                )
 
     def _activar_botones_no_ocupados(self):
         for fila_sub_gato in range(3):
@@ -132,12 +153,33 @@ class VentanaHyperCat:
             for j in range(3):
                 sub_juego = self.juego.tablero[fila_sub_gato][columna_sub_gato]
                 if not sub_juego.terminado():
-                    state = (
-                        "disabled" if sub_juego.tablero[i][j].ocupada() else "normal"
+                    ocupado = sub_juego.tablero[i][j].ocupada()
+                    state = "disabled" if ocupado else "normal"
+                    bg = self._color_segun_cuadrante(
+                        fila_sub_gato * 3 + i,
+                        columna_sub_gato * 3 + j,
+                        activo=ocupado is False,
                     )
                     self.botones[fila_sub_gato * 3 + i][
                         columna_sub_gato * 3 + j
-                    ].config(state=state)
+                    ].config(state=state, bg=bg)
 
     def run(self):
         self.ventana.mainloop()
+
+    def _color_segun_simbolo(self, simbolo: str) -> str:
+        match simbolo:
+            case EstadoCasilla.X.name:
+                return Colors.BLUE
+            case EstadoCasilla.O.name:
+                return Colors.RED
+            case _:
+                return Colors.BLACK
+
+    def _color_segun_cuadrante(
+        self, fila: int, columna: int, activo: bool = False
+    ) -> str:
+        if (fila // 3 + columna // 3) % 2 == 0:
+            return Colors.LIGHT_GREEN if activo else Colors.DARK_GREEN
+        else:
+            return Colors.LIGHT_PINK if activo else Colors.DARK_MAGENTA
