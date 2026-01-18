@@ -1,8 +1,8 @@
-from ui.ventana import VentanaGato
+from ui import *
 
 
 def main():
-    VentanaGato().run()
+    VentanaHyperCat().run()
 
 
 if __name__ == "__main__":

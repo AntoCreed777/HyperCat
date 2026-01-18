@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from core.gato import Gato
-from enums.resultado import Resultado
+from enums import EstadoCasilla, Resultado
 
 
 class VentanaGato:
@@ -23,7 +23,7 @@ class VentanaGato:
         self._crear_tablero()
 
     def _configurar(self):
-        self.ventana.title("Hyper Cat")
+        self.ventana.title("Gato Normal")
         self.ventana.geometry(f"{self.DIM}x{self.DIM}")
         self.ventana.resizable(False, False)
 
@@ -45,11 +45,18 @@ class VentanaGato:
 
     def _click(self, i: int, j: int, boton: tk.Button):
         simbolo = self.juego.turno.name
-        if not self.juego.jugar(i, j):
-            messagebox.showwarning("Movimiento inválido")
+
+        try:
+            self.juego.jugar(i, j)
+        except ValueError as e:
+            messagebox.showwarning(str(e))
             return
 
-        boton.config(text=simbolo, state="disabled")
+        boton.config(
+            text=simbolo,
+            state="disabled",
+            disabledforeground="blue" if simbolo == EstadoCasilla.X.name else "red",
+        )
 
         resultado = self.juego.validar_victoria()
         if resultado.terminado():
