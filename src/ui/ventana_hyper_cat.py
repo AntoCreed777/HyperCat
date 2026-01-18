@@ -1,53 +1,20 @@
 import tkinter as tk
 from tkinter import messagebox
+from typing import override
 
 from core.hyper_cat import HyperCat
-from enums import Colors, EstadoCasilla, Resultado
+from enums import Resultado
+
+from .ventana_base import VentanaBase
 
 
-class VentanaHyperCat:
-    DIM: int = 800
-    PAD: int = 10
-    BTN: int = (DIM - PAD * 10) // 9
-
+class VentanaHyperCat(VentanaBase):
     juego: HyperCat
-    botones: list[list[tk.Button]]
-    ventana: tk.Tk
 
     def __init__(self):
-        self.juego = HyperCat()
-        self.botones = [[None] * 9 for _ in range(9)]
+        super().__init__(HyperCat, "Hyper Cat", cantidad_botones=9)
 
-        self.ventana = tk.Tk()
-        self._configurar()
-        self._crear_tablero()
-
-    def _configurar(self):
-        self.ventana.title("Hyper Cat")
-        self.ventana.geometry(f"{self.DIM}x{self.DIM}")
-        self.ventana.resizable(False, False)
-
-    def _crear_tablero(self):
-        for i in range(9):
-            for j in range(9):
-                btn = tk.Button(
-                    self.ventana,
-                    font=("Arial", 56, "bold"),
-                    activebackground=Colors.ORANGE,
-                    bg=self._color_segun_cuadrante(i, j),
-                )
-
-                btn.config(command=lambda i=i, j=j, b=btn: self._click(i, j, b))
-
-                btn.place(
-                    x=self.PAD + j * (self.BTN + self.PAD),
-                    y=self.PAD + i * (self.BTN + self.PAD),
-                    width=self.BTN,
-                    height=self.BTN,
-                )
-
-                self.botones[i][j] = btn
-
+    @override
     def _click(self, i: int, j: int, boton: tk.Button):
 
         fila = i // 3
@@ -63,15 +30,10 @@ class VentanaHyperCat:
             )
         except Exception as e:
             messagebox.showwarning("Movimiento inválido", str(e))
-
             return
 
         # Actualizar el botón presionado
-        boton.config(
-            text=simbolo,
-            state="disabled",
-            disabledforeground=self._color_segun_simbolo(simbolo),
-        )
+        self._bloquear_boton_con_simbolo(boton, simbolo)
 
         # Bloquear todos los botones primero
         self._bloquear_todos_botones()
@@ -93,22 +55,12 @@ class VentanaHyperCat:
                 for sub_i in range(3):
                     for sub_j in range(3):
                         btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
-                        simbolo = "X"
-                        btn.config(
-                            text=simbolo,
-                            state="disabled",
-                            disabledforeground=self._color_segun_simbolo(simbolo),
-                        )
+                        self._bloquear_boton_con_simbolo(btn, "X")
             case Resultado.VICTORIA_O:
                 for sub_i in range(3):
                     for sub_j in range(3):
                         btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
-                        simbolo = "O"
-                        btn.config(
-                            text=simbolo,
-                            state="disabled",
-                            disabledforeground=self._color_segun_simbolo(simbolo),
-                        )
+                        self._bloquear_boton_con_simbolo(btn, "O")
             case Resultado.EMPATE:
                 self.juego.tablero[fila][columna].reiniciar()
                 for sub_i in range(3):
@@ -119,26 +71,6 @@ class VentanaHyperCat:
         resultado = self.juego.validar_victoria()
         if resultado.terminado():
             self._fin_juego(resultado)
-
-    def _fin_juego(self, resultado: Resultado):
-        simbolo_ganador = "X" if resultado == Resultado.VICTORIA_X else "O"
-        for i in range(9):
-            for j in range(9):
-                self.botones[i][j].config(
-                    text=simbolo_ganador,
-                    state="disabled",
-                    disabledforeground=Colors.GOLD,
-                    bg=self._color_segun_simbolo(simbolo_ganador),
-                )
-
-        messagebox.showinfo("Fin del juego", resultado.mensaje())
-
-    def _bloquear_todos_botones(self):
-        for f in range(9):
-            for c in range(9):
-                self.botones[f][c].config(
-                    state="disabled", bg=self._color_segun_cuadrante(f, c)
-                )
 
     def _activar_botones_no_ocupados(self):
         for fila_sub_gato in range(3):
@@ -164,23 +96,3 @@ class VentanaHyperCat:
                     self.botones[fila_sub_gato * 3 + i][
                         columna_sub_gato * 3 + j
                     ].config(state=state, bg=bg)
-
-    def run(self):
-        self.ventana.mainloop()
-
-    def _color_segun_simbolo(self, simbolo: str) -> Colors:
-        match simbolo:
-            case EstadoCasilla.X.name:
-                return Colors.BLUE
-            case EstadoCasilla.O.name:
-                return Colors.RED
-            case _:
-                return Colors.BLACK
-
-    def _color_segun_cuadrante(
-        self, fila: int, columna: int, activo: bool = False
-    ) -> Colors:
-        if (fila // 3 + columna // 3) % 2 == 0:
-            return Colors.LIGHT_GREEN if activo else Colors.DARK_GREEN
-        else:
-            return Colors.LIGHT_PINK if activo else Colors.DARK_MAGENTA
