@@ -62,7 +62,8 @@ class VentanaHyperCat:
                 subfila=sub_fila, subcolumna=sub_columna, fila=fila, columna=columna
             )
         except Exception as e:
-            messagebox.showwarning(str(e))
+            messagebox.showwarning("Movimiento inválido", str(e))
+
             return
 
         # Actualizar el botón presionado
