@@ -2,12 +2,7 @@ from ui import *
 
 
 def main():
-    print(
-        "Que deseas jugar?",
-        "\n1. HyperCat",
-        "\n2. TicTacToe (Gato clasico)",
-        "\n\n"
-    )
+    print("Que deseas jugar?", "\n1. HyperCat", "\n2. TicTacToe (Gato clasico)", "\n\n")
 
     while True:
         eleccion = input("Ingresa el numero del juego: ")

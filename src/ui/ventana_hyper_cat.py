@@ -59,9 +59,13 @@ class VentanaHyperCat(VentanaBase):
             self._activar_botones_no_ocupados()
 
         # Verificar si el sub-juego fue reiniciado
-        sub_juego_reiniciado = self.juego.tablero[fila][columna].reiniciado 
+        sub_juego_reiniciado = self.juego.tablero[fila][columna].reiniciado
         # En cuyo caso, se considera el resultado como empate
-        sub_juego_resultado = self.juego.tablero[fila][columna].validar_victoria() if not sub_juego_reiniciado else Resultado.EMPATE
+        sub_juego_resultado = (
+            self.juego.tablero[fila][columna].validar_victoria()
+            if not sub_juego_reiniciado
+            else Resultado.EMPATE
+        )
 
         match sub_juego_resultado:
             case Resultado.VICTORIA_X:

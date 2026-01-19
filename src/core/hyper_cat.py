@@ -1,4 +1,4 @@
-from typing import override, Optional
+from typing import Optional, override
 
 from enums import EstadoCasilla, Resultado
 
@@ -26,7 +26,7 @@ class HyperCat(BaseGato[Gato]):
         subfila: int,
         subcolumna: int,
         fila: Optional[int] = None,
-        columna: Optional[int] = None
+        columna: Optional[int] = None,
     ):
         self.reiniciado = False
 
@@ -59,7 +59,11 @@ class HyperCat(BaseGato[Gato]):
 
         # Validar si el juego principal ha terminado
         # Independientemente de si el sub-gato terminó en victoria o empate
-        if all(self.tablero[fila][columna].terminado() for fila in range(3) for columna in range(3)):
+        if all(
+            self.tablero[fila][columna].terminado()
+            for fila in range(3)
+            for columna in range(3)
+        ):
             return
 
         # Si el sub-gato termina en empate, lo reinicio

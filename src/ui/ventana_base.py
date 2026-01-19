@@ -36,7 +36,7 @@ class VentanaBase(ABC):
             text="",
             font=("Arial", 24, "bold"),
         )
-        self.turno.place(relx=0.5,x=0, y=30, anchor="n")
+        self.turno.place(relx=0.5, x=0, y=30, anchor="n")
 
         self._actualizar_turno()
         self._crear_tablero()
