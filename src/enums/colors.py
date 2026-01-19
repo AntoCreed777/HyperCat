@@ -1,7 +1,15 @@
+"""Módulo con la enumeración de colores."""
+
 from enum import StrEnum
 
 
 class Colors(StrEnum):
+    """
+    Enumeración de nombres de colores utilizados en la aplicación.
+
+    Esta clase define varias constantes de colores para elementos de la interfaz.
+    """
+
     ALICE_BLUE = "alice blue"
     ANTIQUE_WHITE = "antique white"
     AQUA = "aqua"

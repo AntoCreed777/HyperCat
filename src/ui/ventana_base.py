@@ -1,3 +1,5 @@
+"""Módulo con la clase base para las ventanas de juego."""
+
 import tkinter as tk
 from abc import ABC, abstractmethod
 from tkinter import messagebox
@@ -8,6 +10,20 @@ from enums import Colors, EstadoCasilla, Resultado
 
 
 class VentanaBase(ABC):
+    """
+    Clase base abstracta para ventanas de juego.
+
+    Esta clase proporciona la estructura básica para crear ventanas de juego
+    con interfaz gráfica usando tkinter.
+
+    Attributes:
+        juego: La instancia del juego (BaseGato).
+        botones_tablero: Matriz de botones que representan el tablero.
+        ventana: La ventana principal de tkinter.
+        cantidad_botones: Número total de botones en el tablero.
+        turno: Etiqueta que muestra el turno actual.
+    """
+
     juego: BaseGato
     botones_tablero: list[list[tk.Button]]
     ventana: tk.Tk
@@ -16,6 +32,14 @@ class VentanaBase(ABC):
     turno: tk.Label
 
     def __init__(self, juego: Type[BaseGato], titulo: str, cantidad_botones: int = 3):
+        """
+        Inicializa la ventana de juego.
+
+        Args:
+            juego: La clase del juego a instanciar.
+            titulo: El título de la ventana.
+            cantidad_botones: El número de botones por lado del tablero, por defecto 3.
+        """
         self.cantidad_botones = cantidad_botones
 
         self.DIM: int = 800
@@ -114,6 +138,7 @@ class VentanaBase(ABC):
                 )
 
     def run(self):
+        """Inicia el bucle principal de la ventana."""
         self.ventana.mainloop()
 
     def _color_segun_simbolo(self, simbolo: str) -> Colors:

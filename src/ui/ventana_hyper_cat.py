@@ -1,3 +1,5 @@
+"""Módulo con la ventana del juego HyperCat."""
+
 import tkinter as tk
 from tkinter import messagebox
 from typing import override
@@ -10,14 +12,31 @@ from .ventana_base import VentanaBase
 
 
 class VentanaHyperCat(VentanaBase):
+    """
+    Clase que representa la ventana del juego HyperCat.
+
+    Esta clase maneja la interfaz de usuario para el juego HyperCat (Ultimate Tic-Tac-Toe).
+    """
+
     juego: HyperCat
 
     def __init__(self):
+        """Inicializa la ventana del juego HyperCat."""
         super().__init__(HyperCat, "Hyper Cat", cantidad_botones=9)
 
     @override
     def _click(self, i: int, j: int, boton: tk.Button):
+        """
+        Maneja el evento de clic en un botón del tablero.
 
+        Convierte las coordenadas del botón en coordenadas del tablero principal
+        y del sub-tablero correspondiente.
+
+        Args:
+            i: El índice de la fila del botón clickeado (0-8).
+            j: El índice de la columna del botón clickeado (0-8).
+            boton: El botón que fue clickeado.
+        """
         fila = i // 3
         columna = j // 3
         sub_fila = i % 3

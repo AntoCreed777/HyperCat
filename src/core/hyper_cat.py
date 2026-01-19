@@ -1,3 +1,5 @@
+"""Módulo que implementa el juego HyperCat."""
+
 from typing import Optional, override
 
 from enums import EstadoCasilla, Resultado
@@ -8,16 +10,34 @@ from .gato import Gato
 
 
 class HyperCat(BaseGato[Gato]):
+    """
+    Clase que representa el juego HyperCat (Ultimate Tic-Tac-Toe).
+
+    Esta clase implementa la variante avanzada del juego de Gato donde
+    el tablero está compuesto por 9 tableros de Gato más pequeños.
+
+    Attributes:
+        elegir_cualquiera: Indica si el jugador puede elegir cualquier sub-tablero.
+        gato_a_jugar_despues: Coordenadas del próximo sub-tablero donde se debe jugar.
+    """
+
     elegir_cualquiera: bool
     gato_a_jugar_despues: tuple[int, int] | None
 
     def __init__(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
+        """
+        Inicializa el juego HyperCat.
+
+        Args:
+            turno_inicial: El turno inicial del juego, por defecto es X.
+        """
         super().__init__(turno_inicial)
         self.elegir_cualquiera = True
         self.gato_a_jugar_despues = None
 
     @override
     def _generar_tablero(self) -> None:
+        """Genera un tablero de 3x3 donde cada casilla es un juego de Gato."""
         self.tablero: Tablero[Gato] = [[Gato() for _ in range(3)] for _ in range(3)]
 
     @override
@@ -28,6 +48,23 @@ class HyperCat(BaseGato[Gato]):
         fila: Optional[int] = None,
         columna: Optional[int] = None,
     ):
+        """
+        Realiza un movimiento en el tablero de HyperCat.
+
+        Args:
+            subfila: El índice de la fila dentro del sub-tablero [0-2].
+            subcolumna: El índice de la columna dentro del sub-tablero [0-2].
+            fila: El índice de la fila del sub-tablero en el tablero principal [0-2].
+                  Requerido si elegir_cualquiera es True.
+            columna: El índice de la columna del sub-tablero en el tablero principal [0-2].
+                     Requerido si elegir_cualquiera es True.
+
+        Raises:
+            JuegoTerminadoError: Si el juego principal ya ha terminado.
+            EstadoInconsistenteError: Si los parámetros no coinciden con el estado del juego.
+            FueraDeRangoError: Si las coordenadas están fuera del rango válido.
+            SubGatoTerminadoError: Si se intenta jugar en un sub-tablero terminado.
+        """
         self.reiniciado = False
 
         if self.validar_victoria().terminado():

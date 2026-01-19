@@ -1,7 +1,17 @@
+"""Módulo principal del juego."""
+
 from ui import *
 
 
 def main():
+    """
+    Función principal para iniciar el juego.
+
+    Muestra las opciones de juego disponibles y maneja la entrada del usuario
+    para seleccionar el tipo de juego a jugar.
+
+    Lanza el juego seleccionado.
+    """
     print("Que deseas jugar?", "\n1. HyperCat", "\n2. TicTacToe (Gato clasico)", "\n\n")
 
     while True:
