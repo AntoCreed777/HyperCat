@@ -25,7 +25,9 @@ class VentanaBase(ABC):
         ) // cantidad_botones
 
         self.juego = juego()
-        self.botones_tablero = [[None] * cantidad_botones for _ in range(cantidad_botones)]
+        self.botones_tablero = [
+            [None] * cantidad_botones for _ in range(cantidad_botones)
+        ]
 
         self.ventana = tk.Tk()
         self._configurar(titulo)
