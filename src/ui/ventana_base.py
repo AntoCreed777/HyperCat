@@ -9,7 +9,7 @@ from enums import Colors, EstadoCasilla, Resultado
 
 class VentanaBase(ABC):
     juego: BaseGato
-    botones: list[list[tk.Button]]
+    botones_tablero: list[list[tk.Button]]
     ventana: tk.Tk
 
     cantidad_botones: int
@@ -25,7 +25,7 @@ class VentanaBase(ABC):
         ) // cantidad_botones
 
         self.juego = juego()
-        self.botones = [[None] * cantidad_botones for _ in range(cantidad_botones)]
+        self.botones_tablero = [[None] * cantidad_botones for _ in range(cantidad_botones)]
 
         self.ventana = tk.Tk()
         self._configurar(titulo)
@@ -37,6 +37,17 @@ class VentanaBase(ABC):
             font=("Arial", 24, "bold"),
         )
         self.turno.place(relx=0.5, x=0, y=30, anchor="n")
+
+        # Crear boton para reiniciar el juego
+        boton_reiniciar = tk.Button(
+            self.ventana,
+            text="Reiniciar",
+            font=("Arial", 12),
+            bg=Colors.LIGHT_BLUE,
+            activebackground=Colors.BLUE,
+            command=self._reiniciar_juego,
+        )
+        boton_reiniciar.place(relx=0.9, x=0, y=30, anchor="n")
 
         self._actualizar_turno()
         self._crear_tablero()
@@ -65,7 +76,7 @@ class VentanaBase(ABC):
                     height=self.BTN,
                 )
 
-                self.botones[i][j] = btn
+                self.botones_tablero[i][j] = btn
 
     @abstractmethod
     def _click(self, i: int, j: int, boton: tk.Button):
@@ -84,7 +95,7 @@ class VentanaBase(ABC):
 
         for i in range(self.cantidad_botones):
             for j in range(self.cantidad_botones):
-                self.botones[i][j].config(
+                self.botones_tablero[i][j].config(
                     text=simbolo_ganador,
                     state="disabled",
                     disabledforeground=Colors.GOLD,
@@ -96,7 +107,7 @@ class VentanaBase(ABC):
     def _bloquear_todos_botones(self):
         for f in range(self.cantidad_botones):
             for c in range(self.cantidad_botones):
-                self.botones[f][c].config(
+                self.botones_tablero[f][c].config(
                     state="disabled", bg=self._color_segun_cuadrante(f, c)
                 )
 
@@ -133,3 +144,15 @@ class VentanaBase(ABC):
             text=f"Turno de: {turno_actual}",
             fg=self._color_segun_simbolo(turno_actual),
         )
+
+    def _reiniciar_juego(self) -> None:
+        self.juego.reiniciar()
+        self._actualizar_turno()
+
+        for i in range(self.cantidad_botones):
+            for j in range(self.cantidad_botones):
+                self.botones_tablero[i][j].config(
+                    text="",
+                    state="normal",
+                    bg=self._color_segun_cuadrante(i, j),
+                )

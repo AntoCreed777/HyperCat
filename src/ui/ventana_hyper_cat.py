@@ -71,17 +71,17 @@ class VentanaHyperCat(VentanaBase):
             case Resultado.VICTORIA_X:
                 for sub_i in range(3):
                     for sub_j in range(3):
-                        btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
+                        btn = self.botones_tablero[fila * 3 + sub_i][columna * 3 + sub_j]
                         self._bloquear_boton_con_simbolo(btn, "X")
             case Resultado.VICTORIA_O:
                 for sub_i in range(3):
                     for sub_j in range(3):
-                        btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
+                        btn = self.botones_tablero[fila * 3 + sub_i][columna * 3 + sub_j]
                         self._bloquear_boton_con_simbolo(btn, "O")
             case Resultado.EMPATE:
                 for sub_i in range(3):
                     for sub_j in range(3):
-                        btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
+                        btn = self.botones_tablero[fila * 3 + sub_i][columna * 3 + sub_j]
                         btn.config(text="")
 
         resultado = self.juego.validar_victoria()
@@ -111,6 +111,6 @@ class VentanaHyperCat(VentanaBase):
                         columna_sub_gato * 3 + j,
                         activo=ocupado is False,
                     )
-                    self.botones[fila_sub_gato * 3 + i][
+                    self.botones_tablero[fila_sub_gato * 3 + i][
                         columna_sub_gato * 3 + j
                     ].config(state=state, bg=bg)
