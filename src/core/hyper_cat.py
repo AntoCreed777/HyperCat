@@ -22,6 +22,8 @@ class HyperCat(BaseGato[Gato]):
 
     @override
     def jugar(self, subfila: int, subcolumna: int, fila: int = -1, columna: int = -1):
+        super().jugar(fila, columna)
+
         if self.validar_victoria().terminado():
             raise JuegoTerminadoError()
 
@@ -42,10 +44,19 @@ class HyperCat(BaseGato[Gato]):
 
         try:
             gato_seleccionado.jugar(subfila, subcolumna)
-        except ValueError as e:
-            raise ValueError(
+        except GatoError as e:
+            raise GatoError(
                 f"No se pudo jugar en el gato seleccionado\nSub Gato ({fila}, {columna}): {str(e)}"
             )
+
+        # Validar si el juego principal ha terminado
+        # Independientemente de si el sub-gato terminó en victoria o empate
+        if all(self.tablero[fila][columna].terminado() for fila in range(3) for columna in range(3)):
+            return
+
+        # Si el sub-gato termina en empate, lo reinicio
+        if gato_seleccionado.validar_victoria() == Resultado.EMPATE:
+            gato_seleccionado.reiniciar()
 
         gato_destino = self.tablero[subfila][subcolumna]
         # Validar si el gato a jugar despues ha terminado, en cuyo caso permito elegir cualquiera

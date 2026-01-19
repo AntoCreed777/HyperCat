@@ -61,7 +61,14 @@ class VentanaBase(ABC):
         pass
 
     def _fin_juego(self, resultado: Resultado):
-        simbolo_ganador = "X" if resultado == Resultado.VICTORIA_X else "O"
+        match resultado:
+            case Resultado.VICTORIA_X:
+                simbolo_ganador = "X"
+            case Resultado.VICTORIA_O:
+                simbolo_ganador = "O"
+            case Resultado.EMPATE:
+                simbolo_ganador = "-"
+
         for i in range(self.cantidad_botones):
             for j in range(self.cantidad_botones):
                 self.botones[i][j].config(

@@ -12,16 +12,19 @@ class BaseGato(ABC, Generic[ContenidoCasilla]):
     turno: Turno
     tablero: Tablero[ContenidoCasilla]
     resultado: Resultado
+    reiniciado: bool
 
     def __init__(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
         self._generar_tablero()
         self.turno = turno_inicial
         self.resultado = Resultado.EN_CURSO
+        self.reiniciado = False
 
     def reiniciar(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
         self._generar_tablero()
         self.turno = turno_inicial
         self.resultado = Resultado.EN_CURSO
+        self.reiniciado = True
 
     @abstractmethod
     def _generar_tablero(self) -> None:
@@ -80,7 +83,7 @@ class BaseGato(ABC, Generic[ContenidoCasilla]):
 
     @abstractmethod
     def jugar(self, fila: int, columna: int):
-        pass
+        self.reiniciado = False
 
     @abstractmethod
     def _linea_ganadora(self, coords: list[tuple[int, int]]) -> Resultado | None:

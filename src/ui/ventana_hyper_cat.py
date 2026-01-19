@@ -58,8 +58,11 @@ class VentanaHyperCat(VentanaBase):
         else:
             self._activar_botones_no_ocupados()
 
-        # Validar si el sub-juego ha terminado
-        sub_juego_resultado = self.juego.tablero[fila][columna].validar_victoria()
+        # Verificar si el sub-juego fue reiniciado
+        sub_juego_reiniciado = self.juego.tablero[fila][columna].reiniciado 
+        # En cuyo caso, se considera el resultado como empate
+        sub_juego_resultado = self.juego.tablero[fila][columna].validar_victoria() if not sub_juego_reiniciado else Resultado.EMPATE
+
         match sub_juego_resultado:
             case Resultado.VICTORIA_X:
                 for sub_i in range(3):
@@ -72,7 +75,6 @@ class VentanaHyperCat(VentanaBase):
                         btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
                         self._bloquear_boton_con_simbolo(btn, "O")
             case Resultado.EMPATE:
-                self.juego.tablero[fila][columna].reiniciar()
                 for sub_i in range(3):
                     for sub_j in range(3):
                         btn = self.botones[fila * 3 + sub_i][columna * 3 + sub_j]
