@@ -38,7 +38,7 @@ class BaseGato(ABC, Generic[ContenidoCasilla]):
             EstadoCasilla.O if self.turno == EstadoCasilla.X else EstadoCasilla.X
         )
 
-    def _vincular_Jugador_tipo_resultado(self, jugador: Turno) -> Resultado:
+    def _vincular_jugador_tipo_resultado(self, jugador: Turno) -> Resultado:
         if jugador == EstadoCasilla.X:
             return Resultado.VICTORIA_X
         elif jugador == EstadoCasilla.O:

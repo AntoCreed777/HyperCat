@@ -34,7 +34,7 @@ class Gato(BaseGato[EstadoCasilla]):
     def _linea_ganadora(self, coords: list[tuple[int, int]]) -> Resultado | None:
         e = self.tablero[coords[0][0]][coords[0][1]]
         if e != EstadoCasilla.VACIA and all(self.tablero[f][c] == e for f, c in coords):
-            return self._vincular_Jugador_tipo_resultado(e)
+            return self._vincular_jugador_tipo_resultado(e)
         return None
 
     @override
