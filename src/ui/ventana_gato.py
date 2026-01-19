@@ -38,3 +38,5 @@ class VentanaGato(VentanaBase):
         resultado = self.juego.validar_victoria()
         if resultado.terminado():
             self._fin_juego(resultado)
+        else:
+            self._actualizar_turno()

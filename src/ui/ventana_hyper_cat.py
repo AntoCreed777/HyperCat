@@ -83,6 +83,8 @@ class VentanaHyperCat(VentanaBase):
         resultado = self.juego.validar_victoria()
         if resultado.terminado():
             self._fin_juego(resultado)
+        else:
+            self._actualizar_turno()
 
     def _activar_botones_no_ocupados(self):
         for fila_sub_gato in range(3):

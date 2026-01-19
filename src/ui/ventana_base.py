@@ -13,6 +13,7 @@ class VentanaBase(ABC):
     ventana: tk.Tk
 
     cantidad_botones: int
+    turno: tk.Label
 
     def __init__(self, juego: Type[BaseGato], titulo: str, cantidad_botones: int = 3):
         self.cantidad_botones = cantidad_botones
@@ -28,11 +29,21 @@ class VentanaBase(ABC):
 
         self.ventana = tk.Tk()
         self._configurar(titulo)
+
+        # Crear etiqueta de turno actual
+        self.turno = tk.Label(
+            self.ventana,
+            text="",
+            font=("Arial", 24, "bold"),
+        )
+        self.turno.place(relx=0.5,x=0, y=30, anchor="n")
+
+        self._actualizar_turno()
         self._crear_tablero()
 
     def _configurar(self, titulo: str):
         self.ventana.title(titulo)
-        self.ventana.geometry(f"{self.DIM}x{self.DIM}")
+        self.ventana.geometry(f"{self.DIM}x{self.DIM + 100}")
         self.ventana.resizable(False, False)
 
     def _crear_tablero(self):
@@ -49,7 +60,7 @@ class VentanaBase(ABC):
 
                 btn.place(
                     x=self.PAD + j * (self.BTN + self.PAD),
-                    y=self.PAD + i * (self.BTN + self.PAD),
+                    y=self.PAD + i * (self.BTN + self.PAD) + 100,
                     width=self.BTN,
                     height=self.BTN,
                 )
@@ -61,6 +72,8 @@ class VentanaBase(ABC):
         pass
 
     def _fin_juego(self, resultado: Resultado):
+        self.turno.config(text="Juego terminado", fg=Colors.MEDIUM_ORCHID)
+
         match resultado:
             case Resultado.VICTORIA_X:
                 simbolo_ganador = "X"
@@ -112,4 +125,11 @@ class VentanaBase(ABC):
             text=simbolo,
             state="disabled",
             disabledforeground=self._color_segun_simbolo(simbolo),
+        )
+
+    def _actualizar_turno(self) -> None:
+        turno_actual = self.juego.turno.name
+        self.turno.config(
+            text=f"Turno de: {turno_actual}",
+            fg=self._color_segun_simbolo(turno_actual),
         )
