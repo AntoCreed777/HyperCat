@@ -1,4 +1,4 @@
-from typing import override
+from typing import override, Optional
 
 from enums import EstadoCasilla, Resultado
 
@@ -21,13 +21,21 @@ class HyperCat(BaseGato[Gato]):
         self.tablero: Tablero[Gato] = [[Gato() for _ in range(3)] for _ in range(3)]
 
     @override
-    def jugar(self, subfila: int, subcolumna: int, fila: int = -1, columna: int = -1):
-        super().jugar(fila, columna)
+    def jugar(
+        self,
+        subfila: int,
+        subcolumna: int,
+        fila: Optional[int] = None,
+        columna: Optional[int] = None
+    ):
+        self.reiniciado = False
 
         if self.validar_victoria().terminado():
             raise JuegoTerminadoError()
 
         if self.elegir_cualquiera:
+            if fila is None or columna is None:
+                raise EstadoInconsistenteError()
             if self._fuera_de_rango(fila, columna):
                 raise FueraDeRangoError()
         else:

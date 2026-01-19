@@ -83,7 +83,7 @@ class BaseGato(ABC, Generic[ContenidoCasilla]):
 
     @abstractmethod
     def jugar(self, fila: int, columna: int):
-        self.reiniciado = False
+        pass
 
     @abstractmethod
     def _linea_ganadora(self, coords: list[tuple[int, int]]) -> Resultado | None:

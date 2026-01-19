@@ -16,7 +16,7 @@ class Gato(BaseGato[EstadoCasilla]):
 
     @override
     def jugar(self, fila: int, columna: int):
-        super().jugar(fila, columna)
+        self.reiniciado = False
 
         if self.validar_victoria().terminado():
             raise JuegoTerminadoError()
