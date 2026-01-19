@@ -5,6 +5,7 @@ from tkinter import messagebox
 from core.base_gato import BaseGato
 from enums import Colors, EstadoCasilla, Resultado
 
+from typing import Type
 
 class VentanaBase(ABC):
     juego: BaseGato
@@ -13,7 +14,7 @@ class VentanaBase(ABC):
 
     cantidad_botones: int
 
-    def __init__(self, juego: BaseGato, titulo: str, cantidad_botones: int = 3):
+    def __init__(self, juego: Type[BaseGato], titulo: str, cantidad_botones: int = 3):
         self.cantidad_botones = cantidad_botones
 
         self.DIM: int = 800
