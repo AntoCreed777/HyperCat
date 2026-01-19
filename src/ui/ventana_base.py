@@ -1,11 +1,11 @@
 import tkinter as tk
 from abc import ABC, abstractmethod
 from tkinter import messagebox
+from typing import Type
 
 from core.base_gato import BaseGato
 from enums import Colors, EstadoCasilla, Resultado
 
-from typing import Type
 
 class VentanaBase(ABC):
     juego: BaseGato
