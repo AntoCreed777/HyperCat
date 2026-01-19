@@ -1,16 +1,13 @@
-from typing import Literal, TypeAlias, override
+from typing import override
 
 from enums import EstadoCasilla, Resultado
 
-from .base_gato import BaseGato
+from .base_gato import BaseGato, Tablero, Turno
 from .exceptions_custom import JuegoTerminadoError
 from .gato import Gato
 
-Tablero: TypeAlias = list[list[Gato]]
-Turno: TypeAlias = Literal[EstadoCasilla.X, EstadoCasilla.O]
 
-
-class HyperCat(BaseGato):
+class HyperCat(BaseGato[Gato]):
     elegir_cualquiera: bool
     gato_a_jugar_despues: tuple[int, int] | None
 
@@ -21,7 +18,7 @@ class HyperCat(BaseGato):
 
     @override
     def _generar_tablero(self) -> None:
-        self.tablero: Tablero = [[Gato() for _ in range(3)] for _ in range(3)]
+        self.tablero: Tablero[Gato] = [[Gato() for _ in range(3)] for _ in range(3)]
 
     @override
     def jugar(self, subfila: int, subcolumna: int, fila: int = -1, columna: int = -1):
@@ -50,9 +47,9 @@ class HyperCat(BaseGato):
                 f"No se pudo jugar en el gato seleccionado\nSub Gato ({fila}, {columna}): {str(e)}"
             )
 
-        gato_seleccionado = self.tablero[subfila][subcolumna]
+        gato_destino = self.tablero[subfila][subcolumna]
         # Validar si el gato a jugar despues ha terminado, en cuyo caso permito elegir cualquiera
-        if gato_seleccionado.terminado():
+        if gato_destino.terminado():
             self.elegir_cualquiera = True
             self.gato_a_jugar_despues = None
         else:
@@ -72,6 +69,4 @@ class HyperCat(BaseGato):
 
     @override
     def _validar_empate(self) -> bool:
-        if all(self.tablero[f][c].terminado() for f in range(3) for c in range(3)):
-            return True
-        return False
+        return all(self.tablero[f][c].terminado() for f in range(3) for c in range(3))

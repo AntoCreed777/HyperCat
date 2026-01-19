@@ -1,17 +1,15 @@
-from typing import TypeAlias, override
+from typing import override
 
 from enums import EstadoCasilla, Resultado
 
-from .base_gato import BaseGato
-
-Tablero: TypeAlias = list[list[EstadoCasilla]]
+from .base_gato import BaseGato, Tablero
 
 
-class Gato(BaseGato):
+class Gato(BaseGato[EstadoCasilla]):
 
     @override
     def _generar_tablero(self) -> None:
-        self.tablero: Tablero = [
+        self.tablero: Tablero[EstadoCasilla] = [
             [EstadoCasilla.VACIA for _ in range(3)] for _ in range(3)
         ]
 
@@ -38,8 +36,8 @@ class Gato(BaseGato):
 
     @override
     def _validar_empate(self) -> bool:
-        for fila in self.tablero:
-            for casilla in fila:
-                if casilla == EstadoCasilla.VACIA:
-                    return False
-        return True
+        return all(
+            self.tablero[fila][columna] != EstadoCasilla.VACIA
+            for fila in range(3)
+            for columna in range(3)
+        )

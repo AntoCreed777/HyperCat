@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Any, Literal, TypeAlias
+from typing import Generic, Literal, TypeAlias, TypeVar
 
 from enums import EstadoCasilla, Resultado
 
-Tablero: TypeAlias = list[list[Any]]
+ContenidoCasilla = TypeVar("ContenidoCasilla")
+Tablero: TypeAlias = list[list[ContenidoCasilla]]
 Turno: TypeAlias = Literal[EstadoCasilla.X, EstadoCasilla.O]
 
 
-class BaseGato(ABC):
+class BaseGato(ABC, Generic[ContenidoCasilla]):
     turno: Turno
-    tablero: Tablero
+    tablero: Tablero[ContenidoCasilla]
     resultado: Resultado
 
     def __init__(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
@@ -26,8 +27,8 @@ class BaseGato(ABC):
     def _generar_tablero(self) -> None:
         pass
 
-    def _fuera_de_rango(self, fila: int, columna: int) -> bool:
-        return not (0 <= fila < 3 and 0 <= columna < 3)
+    def _fuera_de_rango(self, fila: int, columna: int, size: int = 3) -> bool:
+        return not (0 <= fila < size and 0 <= columna < size)
 
     def _cambiar_turno(self) -> None:
         self.turno = (
