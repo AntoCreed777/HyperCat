@@ -57,15 +57,6 @@ class HyperCat(BaseGato[Gato]):
                 f"No se pudo jugar en el gato seleccionado\nSub Gato ({fila}, {columna}): {str(e)}"
             )
 
-        # Validar si el juego principal ha terminado
-        # Independientemente de si el sub-gato terminó en victoria o empate
-        if all(
-            self.tablero[fila][columna].terminado()
-            for fila in range(3)
-            for columna in range(3)
-        ):
-            return
-
         # Si el sub-gato termina en empate, lo reinicio
         if gato_seleccionado.validar_victoria() == Resultado.EMPATE:
             gato_seleccionado.reiniciar()
