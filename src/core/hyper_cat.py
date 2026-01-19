@@ -3,7 +3,7 @@ from typing import override
 from enums import EstadoCasilla, Resultado
 
 from .base_gato import BaseGato, Tablero, Turno
-from .exceptions_custom import JuegoTerminadoError
+from .exceptions_custom import *
 from .gato import Gato
 
 
@@ -23,20 +23,20 @@ class HyperCat(BaseGato[Gato]):
     @override
     def jugar(self, subfila: int, subcolumna: int, fila: int = -1, columna: int = -1):
         if self.validar_victoria().terminado():
-            raise JuegoTerminadoError("El juego ya ha terminado.")
+            raise JuegoTerminadoError()
 
         if self.elegir_cualquiera:
             if self._fuera_de_rango(fila, columna):
-                raise ValueError("Debe especificar un gato válido para jugar.")
+                raise FueraDeRangoError()
         else:
             if self.gato_a_jugar_despues is None:
-                raise RuntimeError("No se ha establecido el gato a jugar después.")
+                raise EstadoInconsistenteError()
             fila, columna = self.gato_a_jugar_despues
 
         gato_seleccionado = self.tablero[fila][columna]
         if gato_seleccionado.terminado():
             self.elegir_cualquiera = True
-            raise JuegoTerminadoError("El gato seleccionado ya ha terminado.")
+            raise SubGatoTerminadoError()
 
         gato_seleccionado.turno = self.turno
 

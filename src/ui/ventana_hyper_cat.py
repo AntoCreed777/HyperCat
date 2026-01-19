@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import override
 
+from core.exceptions_custom import *
 from core.hyper_cat import HyperCat
 from enums import Resultado
 
@@ -28,8 +29,17 @@ class VentanaHyperCat(VentanaBase):
             self.juego.jugar(
                 subfila=sub_fila, subcolumna=sub_columna, fila=fila, columna=columna
             )
-        except Exception as e:
+
+        except MovimientoInvalidoError as e:
             messagebox.showwarning("Movimiento inválido", str(e))
+            return
+
+        except JuegoTerminadoError:
+            messagebox.showinfo("Fin del juego", "El juego ya ha terminado.")
+            return
+
+        except GatoError as e:
+            messagebox.showerror("Error del juego", str(e))
             return
 
         # Actualizar el botón presionado

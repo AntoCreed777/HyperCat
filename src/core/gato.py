@@ -3,6 +3,7 @@ from typing import override
 from enums import EstadoCasilla, Resultado
 
 from .base_gato import BaseGato, Tablero
+from .exceptions_custom import *
 
 
 class Gato(BaseGato[EstadoCasilla]):
@@ -16,13 +17,13 @@ class Gato(BaseGato[EstadoCasilla]):
     @override
     def jugar(self, fila: int, columna: int):
         if self.validar_victoria().terminado():
-            raise ValueError("El juego ya ha terminado.")
+            raise JuegoTerminadoError()
 
         if self._fuera_de_rango(fila, columna):
-            raise ValueError("Coordenadas fuera de rango.")
+            raise FueraDeRangoError()
 
         if self.tablero[fila][columna] != EstadoCasilla.VACIA:
-            raise ValueError("La casilla ya está ocupada.")
+            raise CasillaOcupadaError()
 
         self.tablero[fila][columna] = self.turno
         self._cambiar_turno()

@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import override
 
+from core.exceptions_custom import *
 from core.gato import Gato
 
 from .ventana_base import VentanaBase
@@ -19,8 +20,17 @@ class VentanaGato(VentanaBase):
 
         try:
             self.juego.jugar(i, j)
-        except ValueError as e:
-            messagebox.showwarning(str(e))
+
+        except MovimientoInvalidoError as e:
+            messagebox.showwarning("Movimiento inválido")
+            return
+
+        except JuegoTerminadoError:
+            messagebox.showinfo("Fin del juego", "El juego ya terminó.")
+            return
+
+        except GatoError as e:
+            messagebox.showerror("Error", str(e))
             return
 
         self._bloquear_boton_con_simbolo(boton, simbolo)
