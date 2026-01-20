@@ -35,6 +35,17 @@ class HyperCat(BaseGato[Gato]):
         self.elegir_cualquiera = True
         self.gato_a_jugar_despues = None
 
+    def reiniciar(self, turno_inicial: Turno = EstadoCasilla.X) -> None:
+        """
+        Reinicia el juego HyperCat a su estado inicial.
+
+        Args:
+            turno_inicial: El turno inicial después del reinicio, por defecto es X.
+        """
+        super().reiniciar(turno_inicial)
+        self.elegir_cualquiera = True
+        self.gato_a_jugar_despues = None
+
     @override
     def _generar_tablero(self) -> None:
         """Genera un tablero de 3x3 donde cada casilla es un juego de Gato."""
