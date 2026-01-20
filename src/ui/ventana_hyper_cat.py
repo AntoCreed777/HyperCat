@@ -23,6 +23,36 @@ class VentanaHyperCat(VentanaBase):
     def __init__(self):
         """Inicializa la ventana del juego HyperCat."""
         super().__init__(HyperCat, "Hyper Cat", cantidad_botones=9)
+    
+    def _crear_tablero(self):
+        """
+        Crea el tablero de botones para el juego HyperCat.
+
+        Cada botón se colorea según el cuadrante al que pertenece en estado activo.        
+        """
+        super()._crear_tablero()
+
+        for fila in self.botones_tablero:
+            for boton in fila:
+                boton.config(bg=self._color_segun_cuadrante(
+                    self.botones_tablero.index(fila),
+                    fila.index(boton),
+                    activo=True,
+                ))
+    
+    def _reiniciar_juego(self):
+        """
+        Reinicia el juego y actualiza los colores de los botones del tablero.
+        """
+        super()._reiniciar_juego()
+
+        for fila in self.botones_tablero:
+            for boton in fila:
+                boton.config(bg=self._color_segun_cuadrante(
+                    self.botones_tablero.index(fila),
+                    fila.index(boton),
+                    activo=True,
+                ))
 
     @override
     def _click(self, i: int, j: int, boton: tk.Button):
