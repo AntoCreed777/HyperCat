@@ -1,6 +1,6 @@
 """Módulo principal del juego."""
 
-from ui import *
+from src.ui import *
 
 
 def main():

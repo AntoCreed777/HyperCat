@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 from tkinter import messagebox
 from typing import Type
 
-from core import BaseGato
-from enums import Colors, EstadoCasilla, Resultado
+from src.core import BaseGato
+from src.enums import Colors, EstadoCasilla, Resultado
 
 
 class VentanaBase(ABC):

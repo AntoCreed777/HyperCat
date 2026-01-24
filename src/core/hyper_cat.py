@@ -4,11 +4,11 @@ from typing import Optional, override
 
 from src.core.base_gato import BaseGato, Tablero, Turno
 from src.core.exceptions_custom import *
-from src.core.offline.gato import GatoOffline
+from src.core.gato import Gato
 from src.enums import EstadoCasilla, Resultado
 
 
-class HyperCatOffline(BaseGato[GatoOffline]):
+class HyperCat(BaseGato[Gato]):
     """
     Clase que representa el juego HyperCat (Ultimate Tic-Tac-Toe).
 
@@ -48,8 +48,8 @@ class HyperCatOffline(BaseGato[GatoOffline]):
     @override
     def _generar_tablero(self) -> None:
         """Genera un tablero de 3x3 donde cada casilla es un juego de Gato."""
-        self.tablero: Tablero[GatoOffline] = [
-            [GatoOffline() for _ in range(3)] for _ in range(3)
+        self.tablero: Tablero[Gato] = [
+            [Gato() for _ in range(3)] for _ in range(3)
         ]
 
     @override

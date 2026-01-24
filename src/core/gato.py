@@ -7,7 +7,7 @@ from src.core.exceptions_custom import *
 from src.enums import EstadoCasilla, Resultado
 
 
-class GatoOffline(BaseGato[EstadoCasilla]):
+class Gato(BaseGato[EstadoCasilla]):
     """
     Clase que representa el juego de Gato clásico (Tic-Tac-Toe).
 

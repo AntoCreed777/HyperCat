@@ -4,7 +4,7 @@ Este módulo contiene un cliente interactivo que se conecta a un servidor
 y permite enviar y recibir mensajes de forma interactiva.
 """
 
-from src.core import SocketClient
+from src.network import SocketClient
 
 client = SocketClient()
 

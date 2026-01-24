@@ -4,7 +4,7 @@ Este módulo contiene un servidor interactivo que acepta conexiones de clientes
 y permite enviar y recibir mensajes de forma interactiva.
 """
 
-from src.core import SocketServer
+from src.network import SocketServer
 
 server = SocketServer()
 server.accept_connection()

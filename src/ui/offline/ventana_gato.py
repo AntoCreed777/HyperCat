@@ -4,9 +4,9 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import override
 
-from core import GatoOffline
-from core.exceptions_custom import *
-from ui.ventana_base import VentanaBase
+from src.core import Gato
+from src.core.exceptions_custom import *
+from src.ui.ventana_base import VentanaBase
 
 
 class VentanaGatoOffline(VentanaBase):
@@ -16,11 +16,11 @@ class VentanaGatoOffline(VentanaBase):
     Esta clase maneja la interfaz de usuario para el juego de Gato tradicional.
     """
 
-    juego: GatoOffline
+    juego: Gato
 
     def __init__(self):
         """Inicializa la ventana del juego de Gato."""
-        super().__init__(GatoOffline, "Gato Normal", cantidad_botones=3)
+        super().__init__(Gato, "Gato Normal", cantidad_botones=3)
 
     @override
     def _click(self, i: int, j: int, boton: tk.Button):

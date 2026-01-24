@@ -4,10 +4,10 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import override
 
-from core import HyperCatOffline
-from core.exceptions_custom import *
-from enums import Resultado
-from ui.ventana_base import VentanaBase
+from src.core import HyperCat
+from src.core.exceptions_custom import *
+from src.enums import Resultado
+from src.ui.ventana_base import VentanaBase
 
 
 class VentanaHyperCatOffline(VentanaBase):
@@ -17,11 +17,11 @@ class VentanaHyperCatOffline(VentanaBase):
     Esta clase maneja la interfaz de usuario para el juego HyperCat (Ultimate Tic-Tac-Toe).
     """
 
-    juego: HyperCatOffline
+    juego: HyperCat
 
     def __init__(self):
         """Inicializa la ventana del juego HyperCat."""
-        super().__init__(HyperCatOffline, "Hyper Cat", cantidad_botones=9)
+        super().__init__(HyperCat, "Hyper Cat", cantidad_botones=9)
 
     def _crear_tablero(self):
         """

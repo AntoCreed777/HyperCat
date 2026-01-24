@@ -1,7 +1,7 @@
 """Módulo con funciones para imprimir y visualizar el estado del tablero en consola."""
 
-from core import BaseGato, GatoOffline
-from enums import EstadoCasilla, Resultado
+from src.core import BaseGato, Gato
+from src.enums import EstadoCasilla, Resultado
 
 
 def print_gato(gato: BaseGato) -> None:
@@ -20,7 +20,7 @@ def print_gato(gato: BaseGato) -> None:
     if not isinstance(gato, BaseGato):
         raise ValueError("El objeto proporcionado no es una instancia de BaseGato.")
 
-    if isinstance(gato, GatoOffline):
+    if isinstance(gato, Gato):
         tamano = 3
     else:  # HyperCat
         tamano = 9
@@ -51,7 +51,7 @@ def print_gato(gato: BaseGato) -> None:
                     fila_str += " O "
 
                 # Subgato
-                case GatoOffline():
+                case Gato():
                     match casilla.validar_victoria():
                         case Resultado.EN_CURSO:
                             fila_str += " . "
