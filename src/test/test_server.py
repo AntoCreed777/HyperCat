@@ -15,6 +15,9 @@ while True:
     # Recepción de datos
     data = server.receive_data()
 
+    if data is None:
+        break
+
     print(f"Received data:\t{data}")
 
     server.respond_success()

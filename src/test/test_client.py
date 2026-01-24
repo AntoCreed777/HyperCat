@@ -6,6 +6,9 @@ while True:
     # Recepción de datos
     data = client.receive_data()
 
+    if data is None:    # El servidor cerró la conexión
+        break
+
     print(f"Received data:\t{data}")
 
     client.respond_success()
