@@ -18,10 +18,10 @@ def main():
         eleccion = input("Ingresa el numero del juego: ")
         match eleccion:
             case "1":
-                VentanaHyperCat().run()
+                VentanaHyperCatOffline().run()
                 break
             case "2":
-                VentanaGato().run()
+                VentanaGatoOffline().run()
                 break
             case _:
                 print("Opcion no valida\n\n")

@@ -2,13 +2,12 @@
 
 from typing import override
 
+from core.base_gato import BaseGato, Tablero
+from core.exceptions_custom import *
 from enums import EstadoCasilla, Resultado
 
-from .base_gato import BaseGato, Tablero
-from .exceptions_custom import *
 
-
-class Gato(BaseGato[EstadoCasilla]):
+class GatoOffline(BaseGato[EstadoCasilla]):
     """
     Clase que representa el juego de Gato clásico (Tic-Tac-Toe).
 

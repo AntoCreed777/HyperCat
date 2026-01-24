@@ -1,5 +1,4 @@
-from core.base_gato import BaseGato
-from core import Gato
+from core import BaseGato, GatoOffline
 from enums import EstadoCasilla, Resultado
 
 
@@ -7,10 +6,10 @@ def print_gato(gato: BaseGato) -> None:
     """Imprime el estado actual del gato en la consola."""
     if not isinstance(gato, BaseGato):
         raise ValueError("El objeto proporcionado no es una instancia de BaseGato.")
-    
-    if isinstance(gato, Gato):
+
+    if isinstance(gato, GatoOffline):
         tamano = 3
-    else:   # HyperCat
+    else:  # HyperCat
         tamano = 9
 
     for fila_iterator in range(tamano):
@@ -39,7 +38,7 @@ def print_gato(gato: BaseGato) -> None:
                     fila_str += " O "
 
                 # Subgato
-                case Gato():
+                case GatoOffline():
                     match casilla.validar_victoria():
                         case Resultado.EN_CURSO:
                             fila_str += " . "
@@ -51,9 +50,7 @@ def print_gato(gato: BaseGato) -> None:
                             raise ValueError("Resultado desconocido en subgato.")
 
                 case _:
-                    raise ValueError(
-                        f"Tipo de casilla desconocido: {type(casilla)}"
-                    )
+                    raise ValueError(f"Tipo de casilla desconocido: {type(casilla)}")
 
         print(fila_str.strip())
 

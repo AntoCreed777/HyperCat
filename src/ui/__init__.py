@@ -1,5 +1,5 @@
 """Paquete con las ventanas de interfaz de usuario del juego."""
 
-from .ventana_gato import VentanaGato
-from .ventana_hyper_cat import VentanaHyperCat
 from .cli import print_gato
+from .offline import VentanaGatoOffline, VentanaHyperCatOffline
+from .ventana_base import VentanaBase
