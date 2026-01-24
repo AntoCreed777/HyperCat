@@ -4,13 +4,12 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import override
 
-from core.exceptions_custom import *
-from core.gato import Gato
+from src.core import Gato
+from src.core.exceptions_custom import *
+from src.ui.ventana_base import VentanaBase
 
-from .ventana_base import VentanaBase
 
-
-class VentanaGato(VentanaBase):
+class VentanaGatoOffline(VentanaBase):
     """
     Clase que representa la ventana del juego de Gato clásico.
 

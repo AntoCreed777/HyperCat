@@ -2,11 +2,10 @@
 
 from typing import Optional, override
 
-from enums import EstadoCasilla, Resultado
-
-from .base_gato import BaseGato, Tablero, Turno
-from .exceptions_custom import *
-from .gato import Gato
+from src.core.base_gato import BaseGato, Tablero, Turno
+from src.core.exceptions_custom import *
+from src.core.gato import Gato
+from src.enums import EstadoCasilla, Resultado
 
 
 class HyperCat(BaseGato[Gato]):
@@ -49,7 +48,9 @@ class HyperCat(BaseGato[Gato]):
     @override
     def _generar_tablero(self) -> None:
         """Genera un tablero de 3x3 donde cada casilla es un juego de Gato."""
-        self.tablero: Tablero[Gato] = [[Gato() for _ in range(3)] for _ in range(3)]
+        self.tablero: Tablero[Gato] = [
+            [Gato() for _ in range(3)] for _ in range(3)
+        ]
 
     @override
     def jugar(

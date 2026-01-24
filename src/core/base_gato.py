@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic, Literal, TypeAlias, TypeVar
 
-from enums import EstadoCasilla, Resultado
+from src.enums import EstadoCasilla, Resultado
 
 ContenidoCasilla = TypeVar("ContenidoCasilla")
 Tablero: TypeAlias = list[list[ContenidoCasilla]]

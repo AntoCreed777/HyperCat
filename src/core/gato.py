@@ -2,10 +2,9 @@
 
 from typing import override
 
-from enums import EstadoCasilla, Resultado
-
-from .base_gato import BaseGato, Tablero
-from .exceptions_custom import *
+from src.core.base_gato import BaseGato, Tablero
+from src.core.exceptions_custom import *
+from src.enums import EstadoCasilla, Resultado
 
 
 class Gato(BaseGato[EstadoCasilla]):

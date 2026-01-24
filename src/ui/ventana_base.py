@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 from tkinter import messagebox
 from typing import Type
 
-from core.base_gato import BaseGato
-from enums import Colors, EstadoCasilla, Resultado
+from src.core import BaseGato
+from src.enums import Colors, EstadoCasilla, Resultado
 
 
 class VentanaBase(ABC):
@@ -79,11 +79,23 @@ class VentanaBase(ABC):
         self._crear_tablero()
 
     def _configurar(self, titulo: str):
+        """
+        Configura las propiedades básicas de la ventana.
+
+        Args:
+            titulo: El título de la ventana.
+        """
         self.ventana.title(titulo)
         self.ventana.geometry(f"{self.DIM}x{self.DIM + 100}")
         self.ventana.resizable(False, False)
 
     def _crear_tablero(self):
+        """
+        Crea la matriz de botones que representan el tablero de juego.
+
+        Cada botón se posiciona según su fila y columna, con colores asignados
+        según el cuadrante al que pertenece.
+        """
         for i in range(self.cantidad_botones):
             for j in range(self.cantidad_botones):
                 btn = tk.Button(
@@ -106,9 +118,28 @@ class VentanaBase(ABC):
 
     @abstractmethod
     def _click(self, i: int, j: int, boton: tk.Button):
+        """
+        Maneja el evento de clic en un botón del tablero.
+
+        Este método debe ser implementado por las clases derivadas para
+        definir el comportamiento específico del juego.
+
+        Args:
+            i: El índice de la fila del botón clickeado.
+            j: El índice de la columna del botón clickeado.
+            boton: El botón que fue clickeado.
+        """
         pass
 
     def _fin_juego(self, resultado: Resultado):
+        """
+        Maneja el evento de fin del juego.
+
+        Deshabilita todos los botones y muestra el resultado final.
+
+        Args:
+            resultado: El resultado del juego (VICTORIA_X, VICTORIA_O o EMPATE).
+        """
         self.turno.config(text="Juego terminado", fg=Colors.MEDIUM_ORCHID)
 
         match resultado:
@@ -131,6 +162,7 @@ class VentanaBase(ABC):
         messagebox.showinfo("Fin del juego", resultado.mensaje())
 
     def _bloquear_todos_botones(self):
+        """Deshabilita todos los botones del tablero."""
         for f in range(self.cantidad_botones):
             for c in range(self.cantidad_botones):
                 self.botones_tablero[f][c].config(
@@ -142,6 +174,15 @@ class VentanaBase(ABC):
         self.ventana.mainloop()
 
     def _color_segun_simbolo(self, simbolo: str) -> Colors:
+        """
+        Retorna el color correspondiente a un símbolo del juego.
+
+        Args:
+            simbolo: El símbolo ('X', 'O' u otro).
+
+        Returns:
+            El color (Colors) correspondiente al símbolo.
+        """
         match simbolo:
             case EstadoCasilla.X.name:
                 return Colors.BLUE
@@ -153,12 +194,32 @@ class VentanaBase(ABC):
     def _color_segun_cuadrante(
         self, fila: int, columna: int, activo: bool = False
     ) -> Colors:
+        """
+        Retorna el color correspondiente al cuadrante de una posición.
+
+        Alterna colores para crear un patrón de tablero de ajedrez.
+
+        Args:
+            fila: Índice de la fila.
+            columna: Índice de la columna.
+            activo: Si True, retorna un color más claro, por defecto False.
+
+        Returns:
+            El color (Colors) correspondiente al cuadrante.
+        """
         if (fila // 3 + columna // 3) % 2 == 0:
             return Colors.LIGHT_GREEN if activo else Colors.DARK_GREEN
         else:
             return Colors.LIGHT_PINK if activo else Colors.DARK_MAGENTA
 
     def _bloquear_boton_con_simbolo(self, boton: tk.Button, simbolo: str) -> None:
+        """
+        Deshabilita un botón y muestra el símbolo correspondiente.
+
+        Args:
+            boton: El botón a deshabilitar.
+            simbolo: El símbolo a mostrar ('X' u 'O').
+        """
         boton.config(
             text=simbolo,
             state="disabled",
@@ -166,6 +227,12 @@ class VentanaBase(ABC):
         )
 
     def _actualizar_turno(self) -> None:
+        """
+        Actualiza la etiqueta que muestra el turno actual.
+
+        Muestra el símbolo del jugador cuyo turno es y utiliza el color
+        correspondiente para diferenciarlo visualmente.
+        """
         turno_actual = self.juego.turno.name
         self.turno.config(
             text=f"Turno de: {turno_actual}",
@@ -173,6 +240,11 @@ class VentanaBase(ABC):
         )
 
     def _reiniciar_juego(self) -> None:
+        """
+        Reinicia el juego a su estado inicial.
+
+        Reinicia la lógica del juego y actualiza la interfaz gráfica.
+        """
         self.juego.reiniciar()
         self._actualizar_turno()
 

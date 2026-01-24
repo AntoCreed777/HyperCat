@@ -4,14 +4,13 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import override
 
-from core.exceptions_custom import *
-from core.hyper_cat import HyperCat
-from enums import Resultado
+from src.core import HyperCat
+from src.core.exceptions_custom import *
+from src.enums import Resultado
+from src.ui.ventana_base import VentanaBase
 
-from .ventana_base import VentanaBase
 
-
-class VentanaHyperCat(VentanaBase):
+class VentanaHyperCatOffline(VentanaBase):
     """
     Clase que representa la ventana del juego HyperCat.
 
@@ -43,9 +42,7 @@ class VentanaHyperCat(VentanaBase):
                 )
 
     def _reiniciar_juego(self):
-        """
-        Reinicia el juego y actualiza los colores de los botones del tablero.
-        """
+        """Reinicia el juego y actualiza los colores de los botones del tablero."""
         super()._reiniciar_juego()
 
         for fila in self.botones_tablero:
@@ -150,6 +147,11 @@ class VentanaHyperCat(VentanaBase):
             self._actualizar_turno()
 
     def _activar_botones_no_ocupados(self):
+        """
+        Habilita todos los botones de sub-juegos no terminados.
+
+        Útil cuando el jugador puede elegir cualquier sub-juego.
+        """
         for fila_sub_gato in range(3):
             for columna_sub_gato in range(3):
                 self._activar_botones_no_ocupados_sub_juego(
@@ -159,17 +161,28 @@ class VentanaHyperCat(VentanaBase):
     def _activar_botones_no_ocupados_sub_juego(
         self, fila_sub_gato: int, columna_sub_gato: int
     ):
+        """
+        Habilita los botones disponibles de un sub-juego específicos.
+
+        Solo habilita casillas vacías de sub-juegos no terminados.
+
+        Args:
+            fila_sub_gato: Índice de fila del sub-juego (0-2).
+            columna_sub_gato: Índice de columna del sub-juego (0-2).
+        """
+        if sub_juego := self.juego.tablero[fila_sub_gato][columna_sub_gato]:
+            if sub_juego.terminado():
+                return
+
         for i in range(3):
             for j in range(3):
-                sub_juego = self.juego.tablero[fila_sub_gato][columna_sub_gato]
-                if not sub_juego.terminado():
-                    ocupado = sub_juego.tablero[i][j].ocupada()
-                    state = "disabled" if ocupado else "normal"
-                    bg = self._color_segun_cuadrante(
-                        fila_sub_gato * 3 + i,
-                        columna_sub_gato * 3 + j,
-                        activo=ocupado is False,
-                    )
-                    self.botones_tablero[fila_sub_gato * 3 + i][
-                        columna_sub_gato * 3 + j
-                    ].config(state=state, bg=bg)
+                ocupado = sub_juego.tablero[i][j].ocupada()
+                state = "disabled" if ocupado else "normal"
+                bg = self._color_segun_cuadrante(
+                    fila_sub_gato * 3 + i,
+                    columna_sub_gato * 3 + j,
+                    activo=ocupado is False,
+                )
+                self.botones_tablero[fila_sub_gato * 3 + i][
+                    columna_sub_gato * 3 + j
+                ].config(state=state, bg=bg)
