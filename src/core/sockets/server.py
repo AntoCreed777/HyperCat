@@ -25,32 +25,13 @@ class SocketServer(BaseSocket):
         print(f"Connection from {addr} has been established!")
         return addr
 
-    def send_data(self, data: str | dict):
-        self._send_message(data, TypeStatus.ENVIO_DATOS)
-        status, response = self._receive_message()
-
-        if status == TypeStatus.ERROR:
-            raise Exception(response)
-
-    def receive_data(self) -> str | dict | None:
-        status, data = self._receive_message()
-
-        if status == TypeStatus.CLOSE:
-            print("Client has closed the connection.")
-            self.close_connection()
-            return None
-
-        if status == TypeStatus.ERROR:
-            raise Exception(data)
-
-        return data
-
     @override
     def close(self):
         """Cierra tanto la conexión activa como el servidor de escucha."""
         self.close_connection()
         if self.server_socket:
             self.server_socket.close()
+            self.server_socket = None
             print("Socket de escucha del servidor cerrado.")
 
     def close_connection(self):

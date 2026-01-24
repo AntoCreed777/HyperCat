@@ -20,7 +20,7 @@ class BaseSocket(ABC):
 
         return wrapper
 
-    # ---------- Protocolo ----------
+    # ---------- Bajo Nivel ----------
     @asegurar_conexion
     def _send_json(self, data: dict):
         payload = json.dumps(data).encode("utf-8")
@@ -45,7 +45,7 @@ class BaseSocket(ABC):
             data += chunk
         return data
 
-    # ---------- API común ----------
+    # ---------- Protocolo ----------
     def _send_message(self, message: str | dict, status: TypeStatus):
         data = MessageSocket.create_message(message, status)
         self._send_json(data)
@@ -54,16 +54,36 @@ class BaseSocket(ABC):
         data = self._recv_json()
         return MessageSocket.parse_message(data)
 
+    # ---------- API ----------
     def respond_success(self, message: str = ""):
         self._send_message(message, TypeStatus.SUCCESS)
 
     def respond_error(self, message: str):
         self._send_message(message, TypeStatus.ERROR)
 
+    def send_data(self, data: str | dict):
+        self._send_message(data, TypeStatus.ENVIO_DATOS)
+
+        status, response = self._receive_message()
+        if status == TypeStatus.ERROR:
+            raise Exception(response)
+
+    def receive_data(self) -> str | dict | None:
+        status, data = self._receive_message()
+
+        if status == TypeStatus.CLOSE:
+            self.close()
+            return None
+
+        if status == TypeStatus.ERROR:
+            raise Exception(data)
+        return data
+
     @abstractmethod
     def close(self):
         pass
 
+    # ---------- Context manager ----------
     def __enter__(self):
         return self
 

@@ -13,24 +13,6 @@ class SocketClient(BaseSocket):
         self.conn = socket.create_connection((host, port))
         print(f"Connected to server at {host}:{port}")
 
-    def send_data(self, data: str | dict):
-        self._send_message(data, TypeStatus.ENVIO_DATOS)
-
-        status, response = self._receive_message()
-        if status == TypeStatus.ERROR:
-            raise Exception(response)
-
-    def receive_data(self) -> str | dict | None:
-        status, data = self._receive_message()
-        if status == TypeStatus.CLOSE:
-            print("Server has closed the connection.")
-            self.close()
-            return None
-
-        if status == TypeStatus.ERROR:
-            raise Exception(data)
-        return data
-
     @override
     def close(self):
         if self.conn:
