@@ -2,9 +2,9 @@
 
 from typing import override
 
-from core.base_gato import BaseGato, Tablero
-from core.exceptions_custom import *
-from enums import EstadoCasilla, Resultado
+from src.core.base_gato import BaseGato, Tablero
+from src.core.exceptions_custom import *
+from src.enums import EstadoCasilla, Resultado
 
 
 class GatoOffline(BaseGato[EstadoCasilla]):

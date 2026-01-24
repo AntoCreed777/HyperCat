@@ -54,7 +54,7 @@ class BaseSocket(ABC):
         data = self._recv_json()
         return MessageSocket.parse_message(data)
 
-    def respond_success(self, message: str):
+    def respond_success(self, message: str = ""):
         self._send_message(message, TypeStatus.SUCCESS)
 
     def respond_error(self, message: str):

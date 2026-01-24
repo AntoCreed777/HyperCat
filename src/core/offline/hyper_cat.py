@@ -2,10 +2,10 @@
 
 from typing import Optional, override
 
-from core.base_gato import BaseGato, Tablero, Turno
-from core.exceptions_custom import *
-from core.offline.gato import GatoOffline
-from enums import EstadoCasilla, Resultado
+from src.core.base_gato import BaseGato, Tablero, Turno
+from src.core.exceptions_custom import *
+from src.core.offline.gato import GatoOffline
+from src.enums import EstadoCasilla, Resultado
 
 
 class HyperCatOffline(BaseGato[GatoOffline]):
