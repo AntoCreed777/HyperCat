@@ -16,6 +16,9 @@ class SocketServer(BaseSocket):
         print(f"Server listening on {host}:{port}")
 
     def accept_connection(self):
+        if self.conn is not None:
+            raise RuntimeError("A client is already connected")
+
         self.conn, addr = self.server_socket.accept()
         print(f"Connection from {addr} has been established!")
         return addr
