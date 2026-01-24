@@ -1,9 +1,22 @@
+"""Módulo con funciones para imprimir y visualizar el estado del tablero en consola."""
+
 from core import BaseGato, GatoOffline
 from enums import EstadoCasilla, Resultado
 
 
 def print_gato(gato: BaseGato) -> None:
-    """Imprime el estado actual del gato en la consola."""
+    """
+    Imprime el estado actual del tablero en la consola.
+
+    Muestra el tablero de juego en formato texto, diferenciando entre el Gato
+    clásico (3x3) y HyperCat (9x9 con sub-tableros).
+
+    Args:
+        gato: Instancia del juego de tipo BaseGato.
+
+    Raises:
+        ValueError: Si el objeto no es una instancia de BaseGato.
+    """
     if not isinstance(gato, BaseGato):
         raise ValueError("El objeto proporcionado no es una instancia de BaseGato.")
 

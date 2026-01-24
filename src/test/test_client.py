@@ -1,3 +1,9 @@
+"""Script de prueba para el cliente de socket.
+
+Este módulo contiene un cliente interactivo que se conecta a un servidor
+y permite enviar y recibir mensajes de forma interactiva.
+"""
+
 from src.core import SocketClient
 
 client = SocketClient()
